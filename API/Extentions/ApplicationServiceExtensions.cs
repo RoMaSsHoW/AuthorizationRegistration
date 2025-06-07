@@ -43,6 +43,7 @@
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ITokenService, TokenService>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         private static void ConfigureJwtAuthentication(IServiceCollection services, IConfiguration configuration)

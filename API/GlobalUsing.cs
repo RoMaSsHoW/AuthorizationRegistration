@@ -9,3 +9,4 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Options;
 global using Microsoft.IdentityModel.Tokens;
 global using System.Text;
+global using BLL.Repositories;
