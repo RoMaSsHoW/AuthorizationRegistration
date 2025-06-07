@@ -1,10 +1,4 @@
-﻿using BLL.Models;
-using BLL.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-
-namespace API.Extentions
+﻿namespace API.Extentions
 {
     public static class ApplicationServiceExtensions
     {

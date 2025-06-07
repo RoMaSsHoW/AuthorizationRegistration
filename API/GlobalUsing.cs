@@ -1,4 +1,9 @@
 ﻿global using API.Extentions;
 global using BLL.Helpers;
+global using BLL.Models;
+global using BLL.Services;
 global using DAL.Data;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.IdentityModel.Tokens;
+global using System.Text;
