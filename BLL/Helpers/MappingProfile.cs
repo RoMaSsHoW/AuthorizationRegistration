@@ -22,6 +22,18 @@
                 .ForMember(dest => dest.UserLastLoginTime, opt => opt.MapFrom(src => src.LastLoginTime))
                 .ForMember(dest => dest.RefreshToken, opt => opt.MapFrom(src => src.RefreshToken))
                 .ForMember(dest => dest.UserIsBlocked, opt => opt.MapFrom(src => src.IsBlocked));
+            CreateMap<User, UserResponse>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.UserName))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.UserEmail))
+                .ForMember(dest => dest.RegistrationTime, opt => opt.MapFrom(src => src.UserRegistrationTime))
+                .ForMember(dest => dest.LastLoginTime, opt => opt.MapFrom(src => src.UserLastLoginTime))
+                .ForMember(dest => dest.IsBlocked, opt => opt.MapFrom(src => src.UserIsBlocked));
+            CreateMap<RegisterDTO, User>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.RefreshToken, opt => opt.MapFrom(src => src.RefreshToken));
+
         }
     }
 }
