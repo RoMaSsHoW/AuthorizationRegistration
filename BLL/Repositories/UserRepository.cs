@@ -1,18 +1,16 @@
-﻿
-using DAL.Data;
-using Microsoft.EntityFrameworkCore;
-
-namespace BLL.Repositories
+﻿namespace BLL.Repositories
 {
     public class UserRepository : IUserRepository
     {
+        private readonly ITokenService _tokenService;
         private readonly AppDbContext _dbContext;
         private readonly IMapper _mapper;
 
-        public UserRepository(AppDbContext dbContext, IMapper mapper)
+        public UserRepository(AppDbContext dbContext, IMapper mapper, ITokenService tokenService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _tokenService = tokenService;
         }
 
         public async Task<IEnumerable<UserResponse>> GetAllUsersAsync()
@@ -23,9 +21,27 @@ namespace BLL.Repositories
             return _mapper.Map<IEnumerable<UserResponse>>(users);
         }
 
-        public Task<bool> LoginUserAsync(LoginDTO user)
+        public async Task<string> LoginUserAsync(LoginDTO user)
         {
-            throw new NotImplementedException();
+            var userFromDB = await _dbContext.Users
+                .FirstOrDefaultAsync(u => u.UserEmail == user.Email);
+            if (userFromDB != null && BCrypt.Net.BCrypt.Verify(user.Password, userFromDB.UserPasswordHash))
+            {
+                userFromDB.UserLastLoginTime = DateTime.Now;
+                await _dbContext.SaveChangesAsync();
+
+                var claim = new ClaimDTO()
+                {
+                    Id = userFromDB.UserId,
+                    Name = userFromDB.UserName,
+                    Email = userFromDB.UserEmail
+                };
+
+                var token = _tokenService.GenerateAccessToken(claim);
+
+                return token;
+            }
+            return string.Empty;
         }
 
         public async Task<bool> RegistreUserAsunc(RegisterDTO user)

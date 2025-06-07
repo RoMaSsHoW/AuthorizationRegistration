@@ -7,3 +7,6 @@ global using System.IdentityModel.Tokens.Jwt;
 global using System.Security.Claims;
 global using System.Security.Cryptography;
 global using System.Text;
+global using BLL.Services;
+global using DAL.Data;
+global using Microsoft.EntityFrameworkCore;
