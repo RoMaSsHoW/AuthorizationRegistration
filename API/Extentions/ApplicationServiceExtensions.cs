@@ -1,4 +1,5 @@
 ﻿using BLL.Models;
+using BLL.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -12,6 +13,7 @@ namespace API.Extentions
             ConfigureJwtAuthentication(services, configuration);
             ConfigureDbContext(services, configuration);
             ConfigureCorsPolicy(services);
+            ConfigureServices(services);
             AddSwagger(services);
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
             return services;
@@ -42,6 +44,11 @@ namespace API.Extentions
                           .AllowAnyMethod();
                 });
             });
+        }
+
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton<ITokenService, TokenService>();
         }
 
         private static void ConfigureJwtAuthentication(IServiceCollection services, IConfiguration configuration)
