@@ -1,12 +1,9 @@
 ﻿global using AutoMapper;
 global using BLL.Models;
 global using DAL.Entities;
-
-
-
-/*
-Методы:
-
-Блокировать/Разблокировать пользовател(я/ей)
-Удалить одного/нескольких
-*/
+global using Microsoft.Extensions.Options;
+global using Microsoft.IdentityModel.Tokens;
+global using System.IdentityModel.Tokens.Jwt;
+global using System.Security.Claims;
+global using System.Security.Cryptography;
+global using System.Text;

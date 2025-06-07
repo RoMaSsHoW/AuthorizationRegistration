@@ -1,9 +1,15 @@
-﻿namespace API.Extentions
+﻿using BLL.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+namespace API.Extentions
 {
     public static class ApplicationServiceExtensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            ConfigureJwtAuthentication(services, configuration);
             ConfigureDbContext(services, configuration);
             ConfigureCorsPolicy(services);
             AddSwagger(services);
@@ -36,6 +42,31 @@
                           .AllowAnyMethod();
                 });
             });
+        }
+
+        private static void ConfigureJwtAuthentication(IServiceCollection services, IConfiguration configuration)
+        {
+            var jwtSettings = configuration.GetSection("JWTSettings").Get<JWTSettings>();
+
+            if (jwtSettings == null || string.IsNullOrEmpty(jwtSettings.Key))
+            {
+                throw new InvalidOperationException("JWT settings are not configured properly.");
+            }
+
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = signingKey
+                    };
+                });
         }
     }
 }
